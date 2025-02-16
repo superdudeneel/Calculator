@@ -1,0 +1,268 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    transition: all 0.3s ease;
+}
+
+:root {
+    --bg-main: #f0f2f5;
+    --calc-bg: #2b2828;
+    --display-bg: #1a1a1a;
+    --btn-bg: #ffffff;
+    --btn-color: #333;
+    --btn-shadow: rgba(0, 0, 0, 0.1);
+    --operator-bg: #4361ee;
+    --operator-color: #fff;
+    --equals-bg: #2ec4b6;
+    --equals-color: #fff;
+    --clear-bg: #ef476f;
+    --clear-color: #fff;
+    --display-text: #fff;
+    --history-text: #f2eded;
+    --btn-hover: #f8f9fa;
+    --calc-shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+    --bg-main: #1a1a1a;
+    --calc-bg: #2d2d2d;
+    --display-bg: #1a1a1a;
+    --btn-bg: #3d3d3d;
+    --btn-color: #fff;
+    --btn-shadow: rgba(0, 0, 0, 0.3);
+    --operator-bg: #2b4acb;
+    --operator-color: #fff;
+    --equals-bg: #1a9082;
+    --equals-color: #fff;
+    --clear-bg: #d13960;
+    --clear-color: #fff;
+    --display-text: #fff;
+    --history-text: #aaa;
+    --btn-hover: #4d4d4d;
+    --calc-shadow: rgba(0, 0, 0, 0.4);
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #bdc3c7, #2c3e50);
+
+    padding: 20px;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.calculator {
+    background: var(--calc-bg);
+    border-radius: 30px;
+    box-shadow: 0 20px 40px var(--calc-shadow);
+    width: 100%;
+    max-width: 460px;
+    overflow: hidden;
+    animation: fadeSlideUp 0.6s ease-out;
+    padding: 20px;
+}
+
+.display {
+    background: var(--display-bg);
+    color: var(--display-text);
+    padding: 30px;
+    text-align: right;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.history-display {
+    font-size: 16px;
+    color: white;
+    min-height: 24px;
+    margin-bottom: 8px;
+}
+
+.current-display {
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 10px;
+}
+
+.btn {
+    border: none;
+    outline: none;
+    padding: 25px;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 16px;
+    background: var(--btn-bg);
+    color: var(--btn-color);
+    position: relative;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 
+        0 8px 15px var(--btn-shadow),
+        0 4px 0 var(--btn-shadow);
+    opacity: 0;
+    animation: buttonPop 0.5s ease-out forwards;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 10px 20px var(--btn-shadow),
+        0 6px 0 var(--btn-shadow);
+}
+
+.btn:active {
+    transform: translateY(2px);
+    box-shadow: 
+        0 4px 8px var(--btn-shadow),
+        0 2px 0 var(--btn-shadow);
+}
+
+.operator {
+    background: var(--operator-bg);
+    color: var(--operator-color);
+}
+
+.equals {
+    background: var(--equals-bg);
+    color: var(--equals-color);
+}
+
+.clear {
+    background: var(--clear-bg);
+    color: var(--clear-color);
+}
+
+.history-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: white;
+    border-radius: 16px;
+    margin-top: 10px;
+}
+
+.history-panel.active {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--btn-shadow);
+    cursor: pointer;
+    color: var(--btn-color);
+}
+
+.history-item:hover {
+    background: var(--btn-hover);
+}
+
+.history-toggle {
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    background: none;
+    border: none;
+    color: white;
+    background: rgb(5, 5, 5);
+    height: 30px;
+    width: 110px;
+    border-radius: 15px;
+
+    cursor: pointer;
+    font-size: 15px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    animation: fadeSlideUp 1s ease-out forwards;
+}
+
+.history-toggle:hover {
+    opacity: 1;
+    background: rgb(60, 140, 177);
+
+}
+
+/* Stagger button animations */
+.btn:nth-child(1) { animation-delay: 0.1s; }
+.btn:nth-child(2) { animation-delay: 0.15s; }
+.btn:nth-child(3) { animation-delay: 0.2s; }
+.btn:nth-child(4) { animation-delay: 0.25s; }
+.btn:nth-child(5) { animation-delay: 0.3s; }
+.btn:nth-child(6) { animation-delay: 0.35s; }
+.btn:nth-child(7) { animation-delay: 0.4s; }
+.btn:nth-child(8) { animation-delay: 0.45s; }
+.btn:nth-child(9) { animation-delay: 0.5s; }
+.btn:nth-child(10) { animation-delay: 0.55s; }
+.btn:nth-child(11) { animation-delay: 0.6s; }
+.btn:nth-child(12) { animation-delay: 0.65s; }
+.btn:nth-child(13) { animation-delay: 0.7s; }
+.btn:nth-child(14) { animation-delay: 0.75s; }
+.btn:nth-child(15) { animation-delay: 0.8s; }
+.btn:nth-child(16) { animation-delay: 0.85s; }
+
+@media (max-width: 480px) {
+    .calculator {
+        width: 95%;
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .btn {
+        padding: 20px;
+        font-size: 20px;
+    }
+
+    .current-display {
+        font-size: 32px;
+    }
+
+    .display {
+        padding: 20px;
+    }
+}
