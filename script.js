@@ -5,14 +5,27 @@ class Calculator {
         this.operation = null;
         this.history = [];
         this.shouldResetDisplay = false;
+        this.graphData = [];
 
         this.displayElement = document.querySelector('.current-display');
         this.historyDisplayElement = document.querySelector('.history-display');
         this.historyPanel = document.querySelector('.history-panel');
         this.historyToggle = document.querySelector('.history-toggle');
+        this.graphContainer = document.querySelector('.graph-container');
+        this.graphCanvas = document.getElementById('graphCanvas');
+        this.chart = null;
 
         this.setupEventListeners();
         this.updateDisplay();
+    }
+
+    convertAngle(value) {
+        return this.isRadians ? value : value * (Math.PI / 180);
+    }
+
+    // Add this method to handle inverse angle conversions
+    convertInverseAngle(value) {
+        return this.isRadians ? value : value * (180 / Math.PI);
     }
 
     setupEventListeners() {
@@ -20,7 +33,9 @@ class Calculator {
             button.addEventListener('click', () => {
                 const value = button.textContent;
                 
-                if (button.classList.contains('operator')) {
+                if (button.classList.contains('graph-btn')) {
+                    this.toggleGraph();
+                } else if (button.classList.contains('operator')) {
                     this.handleOperator(value);
                 } else if (button.classList.contains('equals')) {
                     this.calculate();
@@ -48,6 +63,56 @@ class Calculator {
     }
 
     handleOperator(operator) {
+        if (operator === 'rad' || operator === 'deg') {
+            this.isRadians = operator === 'rad';
+            return;
+        }
+
+        // Handle trigonometric functions
+        if (['sin', 'cos', 'tan'].includes(operator)) {
+            const angle = this.convertAngle(parseFloat(this.currentValue));
+            let result;
+            
+            switch(operator) {
+                case 'sin':
+                    result = Math.sin(angle);
+                    break;
+                case 'cos':
+                    result = Math.cos(angle);
+                    break;
+                case 'tan':
+                    result = Math.tan(angle);
+                    break;
+            }
+            
+            this.addToHistory(`${operator}(${this.currentValue}) = ${result}`);
+            this.currentValue = result.toString();
+            this.updateDisplay();
+            return;
+        }
+
+        // Handle inverse trigonometric functions
+        if (['asin', 'acos', 'atan'].includes(operator)) {
+            const value = parseFloat(this.currentValue);
+            let result;
+            
+            switch(operator) {
+                case 'asin':
+                    result = this.convertInverseAngle(Math.asin(value));
+                    break;
+                case 'acos':
+                    result = this.convertInverseAngle(Math.acos(value));
+                    break;
+                case 'atan':
+                    result = this.convertInverseAngle(Math.atan(value));
+                    break;
+            }
+            
+            this.addToHistory(`${operator}(${this.currentValue}) = ${result}`);
+            this.currentValue = result.toString();
+            this.updateDisplay();
+            return;
+        }
         if (operator === '⌫') {
             this.currentValue = this.currentValue.slice(0, -1) || '0';
             this.updateDisplay();
@@ -62,6 +127,30 @@ class Calculator {
 
         if (operator === '%') {
             this.currentValue = (parseFloat(this.currentValue) / 100).toString();
+            this.updateDisplay();
+            return;
+        }
+
+        if (operator === 'x²') {
+            const num = parseFloat(this.currentValue);
+            this.currentValue = (num * num).toString();
+            this.addToHistory(`${num}² = ${this.currentValue}`);
+            this.updateDisplay();
+            return;
+        }
+
+        if (operator === 'x³') {
+            const num = parseFloat(this.currentValue);
+            this.currentValue = (num * num * num).toString();
+            this.addToHistory(`${num}³ = ${this.currentValue}`);
+            this.updateDisplay();
+            return;
+        }
+
+        if (operator === '√') {
+            const num = parseFloat(this.currentValue);
+            this.currentValue = Math.sqrt(num).toString();
+            this.addToHistory(`√${num} = ${this.currentValue}`);
             this.updateDisplay();
             return;
         }
@@ -99,6 +188,7 @@ class Calculator {
 
         const calculation = `${prev} ${this.operation} ${current} = ${result}`;
         this.addToHistory(calculation);
+        this.addToGraphData(result);
 
         this.currentValue = result.toString();
         this.operation = null;
@@ -106,6 +196,59 @@ class Calculator {
         this.shouldResetDisplay = true;
         this.updateDisplay();
         this.historyDisplayElement.textContent = '';
+        this.updateGraph();
+    }
+
+    addToGraphData(value) {
+        this.graphData.push({
+            x: this.graphData.length + 1,
+            y: parseFloat(value)
+        });
+        if (this.graphData.length > 10) {
+            this.graphData.shift();
+        }
+    }
+
+    updateGraph() {
+        if (!this.chart) {
+            this.initializeChart();
+        } else {
+            this.chart.data.labels = this.graphData.map(point => point.x);
+            this.chart.data.datasets[0].data = this.graphData.map(point => point.y);
+            this.chart.update();
+        }
+    }
+
+    initializeChart() {
+        const ctx = this.graphCanvas.getContext('2d');
+        this.chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: this.graphData.map(point => point.x),
+                datasets: [{
+                    label: 'Calculation Results',
+                    data: this.graphData.map(point => point.y),
+                    borderColor: '#4361ee',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    toggleGraph() {
+        this.graphContainer.classList.toggle('active');
+        if (this.graphContainer.classList.contains('active')) {
+            this.updateGraph();
+        }
     }
 
     clear() {
