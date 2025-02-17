@@ -52,12 +52,13 @@ body {
     justify-content: center;
     align-items: center;
     background-image: radial-gradient(circle at 48% 77%, rgba(27, 27, 27,0.04) 0%, rgba(27, 27, 27,0.04) 50%,rgba(135, 135, 135,0.04) 50%, rgba(135, 135, 135,0.04) 100%),radial-gradient(circle at 74% 36%, rgba(223, 223, 223,0.04) 0%, rgba(223, 223, 223,0.04) 50%,rgba(113, 113, 113,0.04) 50%, rgba(113, 113, 113,0.04) 100%),radial-gradient(circle at 62% 13%, rgba(16, 16, 16,0.04) 0%, rgba(16, 16, 16,0.04) 50%,rgba(168, 168, 168,0.04) 50%, rgba(128, 124, 124, 0.04) 100%),linear-gradient(223deg, rgb(116, 199, 193),rgb(64, 86, 186));
-
+    overflow: hidden;
     padding: 20px;
 }
 
 .buttons {
-    grid-template-columns: repeat(4, 1fr);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
     gap: 12px;
     padding: 10px;
 }
@@ -144,7 +145,7 @@ body {
     background: var(--calc-bg);
     border-radius: 30px;
     box-shadow: 0 20px 40px var(--calc-shadow);
-    width: 100%;
+    width: 90vw;
     max-width: 450px;
     overflow: hidden;
     animation: fadeSlideUp 0.6s ease-out;
@@ -159,6 +160,7 @@ body {
     border-radius: 20px;
     margin-bottom: 20px;
     position: relative;
+    
 }
 
 .history-display {
@@ -169,7 +171,7 @@ body {
 }
 
 .current-display {
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 500;
 }
 
@@ -297,7 +299,7 @@ body {
 .btn:nth-child(15) { animation-delay: 0.8s; }
 .btn:nth-child(16) { animation-delay: 0.85s; }
 
-@media (max-width: 400px) {
+@media (max-width: 360px) {
     .calculator {
         width: 95%;
         margin: 10px;
@@ -305,8 +307,8 @@ body {
     }
 
     .btn {
-        padding: 20px;
-        font-size: 20px;
+        padding: 15px;
+        font-size: 18px;
     }
 
     .current-display {
