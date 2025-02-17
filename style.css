@@ -44,14 +44,65 @@
     --calc-shadow: rgba(0, 0, 0, 0.4);
 }
 
+
+
 body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(to right, #bdc3c7, #2c3e50);
+    background-image: radial-gradient(circle at 48% 77%, rgba(27, 27, 27,0.04) 0%, rgba(27, 27, 27,0.04) 50%,rgba(135, 135, 135,0.04) 50%, rgba(135, 135, 135,0.04) 100%),radial-gradient(circle at 74% 36%, rgba(223, 223, 223,0.04) 0%, rgba(223, 223, 223,0.04) 50%,rgba(113, 113, 113,0.04) 50%, rgba(113, 113, 113,0.04) 100%),radial-gradient(circle at 62% 13%, rgba(16, 16, 16,0.04) 0%, rgba(16, 16, 16,0.04) 50%,rgba(168, 168, 168,0.04) 50%, rgba(128, 124, 124, 0.04) 100%),linear-gradient(223deg, rgb(116, 199, 193),rgb(64, 86, 186));
 
     padding: 20px;
+}
+
+.buttons {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 10px;
+}
+
+/* Update button animations for new buttons */
+.btn:nth-child(21) { animation-delay: 1.1s; }
+.btn:nth-child(22) { animation-delay: 1.15s; }
+.btn:nth-child(23) { animation-delay: 1.2s; }
+.btn:nth-child(24) { animation-delay: 1.25s; }
+
+/* Add these to your existing button styles */
+.btn.trig {
+    background: var(--operator-bg);
+    color: var(--operator-color);
+    font-size: 18px;
+}
+
+.graph-container {
+    display: none;
+    background: white;
+    border-radius: 16px;
+    margin: 15px 0;
+    padding: 15px;
+    height: 200px;
+}
+
+.graph-container.active {
+    display: block;
+}
+
+.buttons {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 10px;
+}
+
+/* Update button animations for new buttons */
+.btn:nth-child(17) { animation-delay: 0.9s; }
+.btn:nth-child(18) { animation-delay: 0.95s; }
+.btn:nth-child(19) { animation-delay: 1s; }
+.btn:nth-child(20) { animation-delay: 1.05s; }
+
+.graph-btn {
+    background: var(--equals-bg);
+    color: var(--equals-color);
 }
 
 /* Theme Toggle */
@@ -94,7 +145,7 @@ body {
     border-radius: 30px;
     box-shadow: 0 20px 40px var(--calc-shadow);
     width: 100%;
-    max-width: 460px;
+    max-width: 550px;
     overflow: hidden;
     animation: fadeSlideUp 0.6s ease-out;
     padding: 20px;
@@ -266,3 +317,7 @@ body {
         padding: 20px;
     }
 }
+/* Add these new styles to your existing CSS */
+
+
+/* Rest of your existing CSS remains the same */
