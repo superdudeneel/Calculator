@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Calculator</title>
-    <link href = "style.css" rel = "stylesheet">
+    <title>Modern Calculator with Graphs</title>
+    <link href="style.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body>
-    <!-- Rest of the HTML and JavaScript remains the same -->
     <div class="calculator">
         <div class="display">
             <button class="history-toggle">History</button>
@@ -15,11 +15,24 @@
             <div class="current-display">0</div>
         </div>
         <div class="history-panel"></div>
+        <div class="graph-container">
+            <canvas id="graphCanvas"></canvas>
+        </div>
         <div class="buttons">
             <button class="btn clear">C</button>
             <button class="btn operator">±</button>
             <button class="btn operator">%</button>
+            <button class="btn operator">rad</button>
+            <button class="btn operator">x²</button>
+            <button class="btn operator">x³</button>
+            <button class="btn operator">√</button>
+            
+            <button class="btn operator graph-btn">📈</button>
+            <button class="btn operator">sin</button>
+            <button class="btn operator">cos</button>
+            <button class="btn operator">tan</button>
             <button class="btn operator">÷</button>
+            
             <button class="btn">7</button>
             <button class="btn">8</button>
             <button class="btn">9</button>
@@ -38,8 +51,6 @@
             <button class="btn equals">=</button>
         </div>
     </div>
-    <script src = "script.js">
-
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
